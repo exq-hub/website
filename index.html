@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="auto">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Exquisitor — Interactive Image and Video Search</title>
+  <meta name="description" content="A research platform for interactive search over large-scale image and video collections.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="canonical" href="https://exquisitor.org">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+
+    :root, [data-theme="light"] {
+      --bg: #f6f7f9;
+      --bg-panel: #edeef2;
+      --bg-elevated: #ffffff;
+      --bg-nav: #1a1e27;
+      --bg-code: #1a1e27;
+      --border: #d8dbe3;
+      --border-strong: #b0b5c1;
+      --text: #1a1e27;
+      --text-secondary: #4d5466;
+      --text-muted: #8890a0;
+      --text-on-dark: #eef0f4;
+      --text-on-dark-dim: rgba(238,240,244,0.55);
+      --accent: #0e8a93;
+      --accent-hover: #0a7078;
+      --accent-light: rgba(14, 138, 147, 0.08);
+      --accent-glow: rgba(14, 138, 147, 0.10);
+      --red: #dc4a42;
+      --orange: #d97a1e;
+      --code-text: rgba(238,240,244,0.9);
+      --code-comment: rgba(238,240,244,0.4);
+      --code-fn: #5ec4cb;
+      --code-num: #f0923a;
+      --card-shadow: 0 2px 16px rgba(0, 0, 0, 0.06);
+      --card-hover-shadow: 0 4px 24px rgba(14, 138, 147, 0.10);
+      --grain-opacity: 0.3;
+      --status-alpha-bg: rgba(217, 122, 30, 0.08);
+      --status-alpha-border: rgba(217, 122, 30, 0.15);
+      --status-alpha-text: #b5650e;
+      --status-soon-bg: rgba(136, 144, 160, 0.08);
+      --status-soon-border: rgba(136, 144, 160, 0.15);
+      --inline-code-bg: #e8eaef;
+      --inline-code-border: #d0d3dc;
+      color-scheme: light;
+    }
+
+
+    [data-theme="dark"] {
+      --bg: #0c1017;
+      --bg-panel: #111620;
+      --bg-elevated: #171d28;
+      --bg-nav: #080b11;
+      --bg-code: #080b11;
+      --border: rgba(90, 200, 208, 0.12);
+      --border-strong: rgba(90, 200, 208, 0.25);
+      --text: #dce1ea;
+      --text-secondary: #95a0b5;
+      --text-muted: #56617a;
+      --text-on-dark: #dce1ea;
+      --text-on-dark-dim: rgba(220,225,234,0.5);
+      --accent: #3cc8d0;
+      --accent-hover: #30b8bf;
+      --accent-light: rgba(60, 200, 208, 0.08);
+      --accent-glow: rgba(60, 200, 208, 0.12);
+      --red: #f97066;
+      --orange: #fb923c;
+      --code-text: rgba(220,225,234,0.88);
+      --code-comment: rgba(220,225,234,0.35);
+      --code-fn: #3cc8d0;
+      --code-num: #fb923c;
+      --card-shadow: 0 2px 20px rgba(0, 0, 0, 0.25);
+      --card-hover-shadow: 0 4px 32px rgba(60, 200, 208, 0.08);
+      --grain-opacity: 0.45;
+      --status-alpha-bg: rgba(251,146,60,0.08);
+      --status-alpha-border: rgba(251,146,60,0.15);
+      --status-alpha-text: #fb923c;
+      --status-soon-bg: rgba(86,97,122,0.12);
+      --status-soon-border: rgba(86,97,122,0.18);
+      --inline-code-bg: rgba(60,200,208,0.06);
+      --inline-code-border: rgba(60,200,208,0.12);
+      color-scheme: dark;
+    }
+
+    /* System preference when auto */
+    @media (prefers-color-scheme: dark) {
+      [data-theme="auto"] {
+        --bg: #0c1017;
+        --bg-panel: #111620;
+        --bg-elevated: #171d28;
+        --bg-nav: #080b11;
+        --bg-code: #080b11;
+        --border: rgba(90, 200, 208, 0.12);
+        --border-strong: rgba(90, 200, 208, 0.25);
+        --text: #dce1ea;
+        --text-secondary: #95a0b5;
+        --text-muted: #56617a;
+        --text-on-dark: #dce1ea;
+        --text-on-dark-dim: rgba(220,225,234,0.5);
+        --accent: #3cc8d0;
+        --accent-hover: #30b8bf;
+        --accent-light: rgba(60, 200, 208, 0.08);
+        --accent-glow: rgba(60, 200, 208, 0.12);
+        --red: #f97066;
+        --orange: #fb923c;
+        --code-text: rgba(220,225,234,0.88);
+        --code-comment: rgba(220,225,234,0.35);
+        --code-fn: #3cc8d0;
+        --code-num: #fb923c;
+        --card-shadow: 0 2px 20px rgba(0, 0, 0, 0.25);
+        --card-hover-shadow: 0 4px 32px rgba(60, 200, 208, 0.08);
+        --grain-opacity: 0.45;
+        --status-alpha-bg: rgba(251,146,60,0.08);
+        --status-alpha-border: rgba(251,146,60,0.15);
+        --status-alpha-text: #fb923c;
+        --status-soon-bg: rgba(86,97,122,0.12);
+        --status-soon-border: rgba(86,97,122,0.18);
+        --inline-code-bg: rgba(60,200,208,0.06);
+        --inline-code-border: rgba(60,200,208,0.12);
+        color-scheme: dark;
+      }
+    }
+
+    html { font-size: 16px; scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Outfit', 'Helvetica Neue', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      transition: background 0.35s ease, color 0.35s ease;
+      --mono: 'JetBrains Mono', 'Courier New', monospace;
+      --sans: 'Outfit', 'Helvetica Neue', sans-serif;
+    }
+
+    /* Subtle grain overlay */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+      opacity: var(--grain-opacity);
+    }
+
+    ::selection { background: var(--accent); color: #fff; }
+
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 36px; }
+
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes slideInRight {
+      from { opacity: 0; transform: translateX(28px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    .reveal {
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1), transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+
+    nav {
+      background: var(--bg-nav);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    nav .container { display: flex; align-items: center; justify-content: space-between; height: 52px; }
+    .nav-left { display: flex; align-items: center; gap: 20px; }
+    .nav-logo {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: #5ec4cb;
+      text-decoration: none;
+      border: 1px solid rgba(94,196,203,0.35);
+      padding: 5px 14px 5px 16px;
+      display: inline-flex;
+      align-items: center;
+      transition: all 0.3s;
+    }
+    .nav-logo:hover { border-color: #5ec4cb; background: rgba(94,196,203,0.06); }
+
+    .nav-right { display: flex; align-items: center; gap: 16px; }
+
+    .nav-links { display: flex; gap: 28px; list-style: none; }
+    .nav-links a {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      font-weight: 400;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-on-dark-dim);
+      text-decoration: none;
+      transition: color 0.25s;
+      position: relative;
+      padding: 2px 0;
+    }
+    .nav-links a:hover, .nav-links a.active { color: #5ec4cb; }
+    .nav-links a.active::after {
+      content: '';
+      position: absolute;
+      bottom: -16px;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: #5ec4cb;
+    }
+
+
+    .theme-toggle {
+      background: none;
+      border: 1px solid rgba(255,255,255,0.12);
+      color: var(--text-on-dark-dim);
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.25s;
+      flex-shrink: 0;
+    }
+    .theme-toggle:hover { border-color: rgba(255,255,255,0.25); color: var(--text-on-dark); }
+    .theme-toggle svg { width: 16px; height: 16px; }
+    .theme-toggle .icon-sun,
+    .theme-toggle .icon-moon { display: none; }
+
+
+    .hero {
+      padding: 72px 0 56px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -40%;
+      right: -15%;
+      width: 550px;
+      height: 550px;
+      background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-grid { display: grid; grid-template-columns: 1fr 420px; gap: 56px; align-items: start; }
+    .hero h1 {
+      font-family: var(--sans);
+      font-size: clamp(2.1rem, 4vw, 2.85rem);
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+      margin-bottom: 22px;
+      animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.08s both;
+    }
+    .hero h1 em {
+      font-style: normal;
+      color: var(--accent);
+    }
+    .hero-body {
+      font-size: 1.05rem;
+      color: var(--text-secondary);
+      line-height: 1.85;
+      margin-bottom: 32px;
+      max-width: 500px;
+      font-weight: 400;
+      animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.16s both;
+    }
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.24s both;
+    }
+
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 11px 22px;
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: 1px solid var(--border);
+      background: var(--bg-elevated);
+      color: var(--text);
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      border-radius: 4px;
+    }
+    .btn:hover { border-color: var(--border-strong); box-shadow: var(--card-shadow); }
+    .btn-accent {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+      font-weight: 600;
+    }
+    .btn-accent:hover {
+      background: var(--accent-hover);
+      border-color: var(--accent-hover);
+      box-shadow: 0 2px 16px var(--accent-glow);
+    }
+
+
+    .hero-spec {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+      animation: slideInRight 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both;
+      box-shadow: var(--card-shadow);
+    }
+    .hero-spec-header {
+      padding: 11px 22px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--bg-panel);
+    }
+    .hero-spec-header span {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+    .hero-spec-body { padding: 24px; }
+    .spec-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .spec-row:last-child { border-bottom: none; }
+    .spec-label {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+    .spec-value {
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--text);
+    }
+    .spec-value.highlight { color: var(--accent); }
+
+
+    .section { padding: 52px 0; }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      margin-bottom: 36px;
+      border-top: 1px solid var(--border);
+      position: relative;
+    }
+    .section-header::before {
+      content: '';
+      position: absolute;
+      top: -1px;
+      left: 0;
+      width: 48px;
+      height: 1px;
+      background: var(--accent);
+    }
+    .section-title {
+      font-family: var(--mono);
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text);
+      background: var(--bg);
+      padding: 0 14px 0 0;
+      position: relative;
+      top: -0.55em;
+      white-space: nowrap;
+      transition: background 0.35s;
+    }
+
+
+    .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .feature-card {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      padding: 26px;
+      border-radius: 6px;
+      position: relative;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: var(--card-shadow);
+    }
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 3px;
+      height: 100%;
+      background: var(--border);
+      border-radius: 6px 0 0 6px;
+      transition: background 0.3s;
+    }
+    .feature-card:hover {
+      border-color: var(--accent);
+      box-shadow: var(--card-hover-shadow);
+      transform: translateY(-2px);
+    }
+    .feature-card:hover::before { background: var(--accent); }
+    .feature-title {
+      font-family: var(--sans);
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+    .feature-desc {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.75;
+      font-weight: 400;
+    }
+
+
+    .arch-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+    .arch-diagram {
+      border: 1px solid var(--border);
+      background: var(--bg-panel);
+      padding: 26px;
+      border-radius: 6px;
+      position: relative;
+    }
+    .arch-layer {
+      border: 1px solid var(--border);
+      background: var(--bg-elevated);
+      padding: 14px 18px;
+      border-radius: 4px;
+      transition: border-color 0.3s;
+    }
+    .arch-layer:hover { border-color: var(--accent); }
+    .arch-layer-name { font-size: 0.92rem; font-weight: 700; }
+    .arch-layer-desc { font-size: 0.85rem; color: var(--text-secondary); margin-top: 3px; }
+    .arch-connector {
+      width: 1px;
+      height: 10px;
+      background: var(--accent);
+      margin: 0 auto;
+      position: relative;
+    }
+    .arch-connector::before, .arch-connector::after {
+      content: '';
+      position: absolute;
+      left: -2px;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+    .arch-connector::before { top: -2px; }
+    .arch-connector::after { bottom: -2px; }
+    .arch-text { display: flex; flex-direction: column; justify-content: center; }
+    .arch-text h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 12px; }
+    .arch-text p { font-size: 0.92rem; color: var(--text-secondary); line-height: 1.8; margin-bottom: 20px; }
+    .arch-list { list-style: none; }
+    .arch-list li {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      padding: 8px 0;
+      border-top: 1px solid var(--border);
+      display: flex;
+      gap: 10px;
+      align-items: baseline;
+      line-height: 1.65;
+    }
+    .arch-list li::before { content: '→'; color: var(--accent); font-weight: 500; }
+
+
+    .code-section { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start; }
+    .code-block {
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+      box-shadow: var(--card-shadow);
+    }
+    .code-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 18px;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg-panel);
+    }
+    .code-filename {
+      font-family: var(--mono);
+      font-size: 0.73rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      color: var(--text-secondary);
+    }
+    .code-lang {
+      font-family: var(--mono);
+      font-size: 0.66rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+    .code-body {
+      padding: 20px;
+      overflow-x: auto;
+      background: var(--bg-code);
+    }
+    .code-body pre {
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      line-height: 2;
+      color: var(--code-text);
+    }
+    .code-body .cm { color: var(--code-comment); }
+    .code-body .fn { color: var(--code-fn); }
+    .code-body .num { color: var(--code-num); }
+    .code-text { display: flex; flex-direction: column; justify-content: center; }
+    .code-text h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 12px; }
+    .code-text p { font-size: 0.92rem; color: var(--text-secondary); line-height: 1.8; margin-bottom: 20px; }
+    .step-list { list-style: none; counter-reset: steps; }
+    .step-list li {
+      counter-increment: steps;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      padding: 8px 0;
+      border-top: 1px solid var(--border);
+      display: flex;
+      gap: 12px;
+      align-items: baseline;
+      line-height: 1.65;
+    }
+    .step-list li::before {
+      content: counter(steps, decimal-leading-zero);
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      font-weight: 500;
+      color: var(--accent);
+      min-width: 20px;
+    }
+
+
+    .repo-table { border: 1px solid var(--border); border-radius: 6px; overflow: hidden; box-shadow: var(--card-shadow); }
+    .repo-row {
+      display: grid;
+      grid-template-columns: 2fr 2fr 160px;
+      gap: 0;
+      padding: 13px 22px;
+      border-bottom: 1px solid var(--border);
+      align-items: center;
+      transition: background 0.2s;
+    }
+    .repo-row:not(.repo-row-header):hover { background: var(--accent-light); }
+    .repo-row:last-child { border-bottom: none; }
+    .repo-row-header { background: var(--bg-panel); }
+    .repo-row-header span {
+      font-family: var(--mono);
+      font-size: 0.66rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+    .repo-name {
+      font-family: var(--mono);
+      font-size: 0.82rem;
+      color: var(--accent);
+      text-decoration: none;
+    }
+    .repo-name:hover { text-decoration: underline; }
+    .repo-name-dim {
+      font-family: var(--mono);
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+    .repo-component { font-size: 0.88rem; color: var(--text-secondary); }
+    .repo-status {
+      font-family: var(--mono);
+      font-size: 0.66rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      display: inline-block;
+      border-radius: 3px;
+    }
+    .status-alpha {
+      background: var(--status-alpha-bg);
+      color: var(--status-alpha-text);
+      border: 1px solid var(--status-alpha-border);
+    }
+    .status-coming-soon {
+      background: var(--status-soon-bg);
+      color: var(--text-muted);
+      border: 1px solid var(--status-soon-border);
+    }
+    @media (max-width: 600px) {
+      .repo-row { grid-template-columns: 1fr 160px; row-gap: 4px; }
+      .repo-row-header span:nth-child(2) { display: none; }
+      .repo-component { display: none; }
+    }
+
+
+    .team-grid { display: flex; gap: 40px; justify-content: center; }
+    .team-member { text-align: center; }
+    .team-photo {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: var(--bg-panel);
+      border: 2px solid var(--border);
+      margin: 0 auto 14px;
+      overflow: hidden;
+      transition: all 0.35s;
+    }
+    .team-member:hover .team-photo {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px var(--accent-light);
+    }
+    .team-photo img { width: 100%; height: 100%; object-fit: cover; }
+    .team-name { font-family: var(--sans); font-size: 0.95rem; font-weight: 700; margin-bottom: 3px; }
+    .team-role {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 22px 0;
+      transition: border-color 0.35s;
+    }
+    footer .container { display: flex; align-items: center; justify-content: space-between; }
+    .footer-left { font-family: var(--mono); font-size: 0.68rem; color: var(--text-muted); letter-spacing: 0.04em; }
+    .footer-links { display: flex; gap: 24px; list-style: none; }
+    .footer-links a {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: color 0.25s;
+    }
+    .footer-links a:hover { color: var(--accent); }
+
+    /* Section description */
+    .section-desc {
+      font-size: 0.92rem;
+      color: var(--text-secondary);
+      line-height: 1.75;
+      margin-bottom: 28px;
+    }
+
+
+    @media (max-width: 900px) {
+      .hero-grid { grid-template-columns: 1fr; }
+      .features-grid { grid-template-columns: 1fr; }
+      .arch-layout, .code-section { grid-template-columns: 1fr; }
+      .nav-links { gap: 16px; }
+      footer .container { flex-direction: column; gap: 12px; text-align: center; }
+    }
+
+    /* HAMBURGER */
+    .nav-hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      width: 32px;
+      height: 32px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+    }
+    .nav-hamburger span {
+      display: block;
+      width: 20px;
+      height: 1.5px;
+      background: var(--text-on-dark-dim);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .nav-hamburger:hover span { background: #5ec4cb; }
+    .nav-hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+    .nav-hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+    @media (max-width: 600px) {
+      .nav-hamburger { display: flex; }
+      .nav-links {
+        display: none;
+        flex-direction: column;
+        gap: 0;
+        position: absolute;
+        top: 52px;
+        left: 0;
+        right: 0;
+        background: var(--bg-nav);
+        border-top: 1px solid rgba(255,255,255,0.06);
+        padding: 8px 0;
+        z-index: 99;
+      }
+      .nav-links.open { display: flex; }
+      .nav-links li a { display: block; padding: 10px 24px; font-size: 0.78rem; }
+      .nav-links a.active::after { display: none; }
+      .nav-right { gap: 10px; }
+    }
+
+    @media (max-width: 420px) {
+      .container { padding: 0 16px; }
+      .hero { padding: 40px 0 32px; }
+      .section-title { font-size: 0.76rem; white-space: normal; }
+      .code-body pre { font-size: 0.72rem; }
+      .step-list li { align-items: flex-start; }
+      .step-list li::before { margin-top: 1px; }
+      .footer-left { font-size: 0.64rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="container">
+      <div class="nav-left">
+        <a href="#" class="nav-logo">Exquisitor</a>
+      </div>
+      <button class="nav-hamburger" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="nav-right">
+        <ul class="nav-links">
+          <li><a href="#overview" class="active">Overview</a></li>
+          <li><a href="#architecture">Architecture</a></li>
+          <li><a href="#quickstart">Quickstart</a></li>
+          <li><a href="https://github.com/exq-hub" target="_blank">GitHub</a></li>
+          <li><a href="https://docs.exquisitor.org" target="_blank">Docs</a></li>
+        </ul>
+        <button class="theme-toggle" aria-label="Toggle theme" title="Toggle light/dark mode">
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+          </svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="container">
+      <div class="hero-grid">
+        <div>
+          <h1>Interactive search across <em>large-scale</em> image and video collections</h1>
+          <p class="hero-body">
+            Exquisitor is a research platform for interactive search over large image and video collections.
+          </p>
+          <div class="hero-actions">
+            <a href="#quickstart" class="btn btn-accent">Get Started</a>
+            <a href="https://github.com/exq-hub/live-services-engine" class="btn" target="_blank">View Source</a>
+            <a href="https://docs.exquisitor.org" class="btn" target="_blank">Read the Docs</a>
+          </div>
+        </div>
+        <div class="hero-spec">
+          <div class="hero-spec-header">
+            <span>Technical Spec</span>
+          </div>
+          <div class="hero-spec-body">
+            <div class="spec-row"><span class="spec-label">System</span><span class="spec-value">Exquisitor</span></div>
+            <div class="spec-row"><span class="spec-label">Type</span><span class="spec-value">Interactive Image and Video Search</span></div>
+            <div class="spec-row"><span class="spec-label">Components</span><span class="spec-value">2 (Frontend + Backend)</span></div>
+            <div class="spec-row"><span class="spec-label">Transport</span><span class="spec-value">REST API</span></div>
+            <div class="spec-row"><span class="spec-label">License</span><span class="spec-value">AGPL-3.0-or-later</span></div>
+            <div class="spec-row"><span class="spec-label">Status</span><span class="spec-value highlight">● Active</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="overview">
+    <div class="container">
+      <div class="section-header"><h2 class="section-title">Overview</h2></div>
+      <div class="features-grid">
+        <div class="feature-card reveal"><div class="feature-title">CLIP Text Search</div><div class="feature-desc">Describe what you're looking for in natural language. The <code style="font-size:0.8em;background:var(--inline-code-bg);padding:2px 6px;border:1px solid var(--inline-code-border);border-radius:3px;">SigLIP</code> model encodes your query into a 1152-dimensional embedding and retrieves the most visually similar items.</div></div>
+        <div class="feature-card reveal"><div class="feature-title">Relevance Feedback</div><div class="feature-desc">Mark results as relevant or irrelevant. The engine trains a linear SVM on your selections and uses the learned weight vector as a new query, converging on intent across sessions.</div></div>
+        <div class="feature-card reveal"><div class="feature-title">Faceted Filtering</div><div class="feature-desc">Compose metadata constraints with arbitrary AND/OR/NOT trees. Faceted queries compile directly to SQL and return results instantly, independent of collection size.</div></div>
+        <div class="feature-card reveal"><div class="feature-title">Flexible Indexing</div><div class="feature-desc">Choose Zarr for exact nearest-neighbour search on collections up to a few hundred thousand items, or FAISS (IVF/HNSW) for approximate search across millions with lower latency.</div></div>
+        <div class="feature-card reveal"><div class="feature-title">Research-First Design</div><div class="feature-desc">Clean, readable Python/FastAPI code designed to be understood and modified. Each search mode is an independent strategy class: swap models, change ranking, or add new modalities.</div></div>
+        <div class="feature-card reveal"><div class="feature-title">Open Source</div><div class="feature-desc">Released under AGPL-3.0-or-later. Use it in your research, cite it in your papers, fork it for your own experiments.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="repositories">
+    <div class="container">
+      <div class="section-header"><h2 class="section-title">Components</h2></div>
+      <p class="section-desc">All components are developed in the open. Stability labels are precise: <code style="font-family:var(--mono);font-size:0.82rem;color:var(--status-alpha-text);background:var(--status-alpha-bg);padding:2px 7px;border:1px solid var(--status-alpha-border);border-radius:3px;">ALPHA</code> means the API surface will change without notice; <code style="font-family:var(--mono);font-size:0.82rem;color:var(--accent);background:var(--accent-light);padding:2px 7px;border:1px solid var(--border);border-radius:3px;">STABLE</code> means semantic versioning is in effect.</p>
+      <div class="repo-table reveal">
+        <div class="repo-row repo-row-header">
+          <span>Repository</span>
+          <span>Component</span>
+          <span>Status</span>
+        </div>
+        <div class="repo-row">
+          <a href="https://github.com/exq-hub/live-services-engine" target="_blank" class="repo-name">live-services-engine</a>
+          <span class="repo-component">Backend / Search Engine</span>
+          <span class="repo-status status-alpha">alpha</span>
+        </div>
+        <div class="repo-row">
+          <a href="https://github.com/exq-hub/base-user-interface" target="_blank" class="repo-name">base-user-interface</a>
+          <span class="repo-component">Frontend / UI</span>
+          <span class="repo-status status-alpha">alpha</span>
+        </div>
+        <div class="repo-row">
+          <span class="repo-name-dim">data-model</span>
+          <span class="repo-component">Data Model / Collection Ingest</span>
+          <span class="repo-status status-coming-soon">coming soon</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="architecture">
+    <div class="container">
+      <div class="section-header"><h2 class="section-title">Architecture</h2></div>
+      <div class="arch-layout">
+        <div class="arch-diagram reveal">
+          <div class="arch-layer"><div class="arch-layer-name">Frontend Client</div><div class="arch-layer-desc">Browser-based UI for search interaction and relevance feedback</div></div>
+          <div class="arch-connector"></div>
+          <div class="arch-layer"><div class="arch-layer-name">REST API</div><div class="arch-layer-desc">HTTP endpoints via FastAPI: search, items, admin, health</div></div>
+          <div class="arch-connector"></div>
+          <div class="arch-layer"><div class="arch-layer-name">Live Services Engine</div><div class="arch-layer-desc">Python/FastAPI backend with CLIP, SVM, and faceted search strategies</div></div>
+          <div class="arch-connector"></div>
+          <div class="arch-layer"><div class="arch-layer-name">Feature Store</div><div class="arch-layer-desc">Zarr or FAISS vector index + SQLite metadata database per collection</div></div>
+        </div>
+        <div class="arch-text reveal">
+          <h3>Two-component system</h3>
+          <p>Exquisitor deliberately avoids microservice complexity. The entire system comprises a frontend client and a Python/FastAPI backend (the Live Services Engine) connected via a REST API. This simplicity is the point: researchers can trace every interaction from click to result.</p>
+          <ul class="arch-list">
+            <li>Frontend handles all user interaction and result display</li>
+            <li>Backend manages indexing, ranking, and model inference</li>
+            <li>REST API with dedicated endpoints for search, items, and admin</li>
+            <li>FAISS or Zarr vector index chosen per collection</li>
+            <li>SQLite database per collection for fast metadata queries</li>
+            <li>Single-machine deployment, GPU optional but recommended</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="quickstart">
+    <div class="container">
+      <div class="section-header"><h2 class="section-title">Quickstart</h2></div>
+      <div class="code-section">
+        <div class="code-block reveal">
+          <div class="code-header"><span class="code-filename">terminal</span><span class="code-lang">bash</span></div>
+          <div class="code-body">
+<pre><span class="cm"># Clone the Live Services Engine</span>
+$ <span class="fn">git</span> clone https://github.com/exq-hub/live-services-engine
+$ <span class="fn">cd</span> live-services-engine
+
+<span class="cm"># Install dependencies (requires Python 3.13+ and uv)</span>
+$ <span class="fn">uv</span> sync
+
+<span class="cm"># Configure a collection</span>
+$ <span class="fn">cp</span> config.example.ini data/config.ini
+<span class="cm"># Edit data/config.ini to point at your index and database</span>
+
+<span class="cm"># Start the server (downloads CLIP model on first run)</span>
+$ <span class="fn">uv</span> run python main.py
+
+<span class="cm"># Verify: http://localhost:8000/health</span></pre>
+          </div>
+        </div>
+        <div class="code-text reveal">
+          <h3>Getting started</h3>
+          <p>Requires Python 3.13+ and <a href="https://docs.astral.sh/uv/" style="color:var(--accent)">uv</a>. Point the config at your index and database, then start the server. The CLIP model is downloaded and cached on first run. A GPU is recommended but not required.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="team">
+    <div class="container">
+      <div class="section-header"><h2 class="section-title">Team</h2></div>
+      <div class="team-grid reveal">
+        <div class="team-member">
+          <a href="https://ujjwal.nl" target="_blank" style="text-decoration:none;color:inherit;">
+            <div class="team-photo"><img src="assets/ujjwal.webp" alt="Ujjwal Sharma"></div>
+            <div class="team-name">Ujjwal Sharma</div>
+          </a>
+          <div class="team-role">Backend &amp; ML Engineering</div>
+        </div>
+        <div class="team-member">
+          <a href="https://oskhan.com/" target="_blank" style="text-decoration:none;color:inherit;">
+            <div class="team-photo"><img src="assets/omar.jpg" alt="Omar Shahbaz Khan"></div>
+            <div class="team-name">Omar Shahbaz Khan</div>
+          </a>
+          <div class="team-role">Database &amp; Search Engineering</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <footer>
+    <div class="container">
+      <div class="footer-left">&copy; 2026 Ujjwal Sharma &amp; Omar Shahbaz Khan &mdash; <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" style="color:inherit;text-decoration:underline;text-underline-offset:2px;">CC BY-SA 4.0</a></div>
+      <ul class="footer-links">
+        <li><a href="https://github.com/exq-hub" target="_blank">GitHub</a></li>
+        <li><a href="https://docs.exquisitor.org" target="_blank">Docs</a></li>
+        <li><a href="/cdn-cgi/l/email-protection#3b4e1548535a49565a7b4e4d5a155557">Contact</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+  
+  <script>
+    const themeToggle = document.querySelector('.theme-toggle');
+    const html = document.documentElement;
+
+    function getEffectiveTheme() {
+      const stored = localStorage.getItem('exq-theme');
+      if (stored === 'dark' || stored === 'light') return stored;
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+
+    function applyIconState() {
+      const effective = getEffectiveTheme();
+      themeToggle.querySelector('.icon-sun').style.display = effective === 'dark' ? 'block' : 'none';
+      themeToggle.querySelector('.icon-moon').style.display = effective === 'light' ? 'block' : 'none';
+    }
+
+    // Init
+    const savedTheme = localStorage.getItem('exq-theme');
+    if (savedTheme) html.setAttribute('data-theme', savedTheme);
+    applyIconState();
+
+    themeToggle.addEventListener('click', () => {
+      const next = getEffectiveTheme() === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', next);
+      localStorage.setItem('exq-theme', next);
+      applyIconState();
+    });
+
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+      if (!localStorage.getItem('exq-theme')) applyIconState();
+    });
+
+
+    const hamburger = document.querySelector('.nav-hamburger');
+    const navLinks = document.querySelector('.nav-links');
+    hamburger.addEventListener('click', () => {
+      const open = navLinks.classList.toggle('open');
+      hamburger.classList.toggle('open', open);
+      hamburger.setAttribute('aria-expanded', open);
+    });
+    document.querySelectorAll('.nav-links a').forEach(link => {
+      link.addEventListener('click', () => {
+        navLinks.classList.remove('open');
+        hamburger.classList.remove('open');
+        hamburger.setAttribute('aria-expanded', 'false');
+      });
+    });
+
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+      });
+    });
+
+    const sections = document.querySelectorAll('.section, .hero');
+    const activeLinks = document.querySelectorAll('.nav-links a[href^="#"]');
+    const navObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const id = entry.target.getAttribute('id');
+          if (id) { activeLinks.forEach(link => { link.classList.toggle('active', link.getAttribute('href') === '#' + id); }); }
+        }
+      });
+    }, { rootMargin: '-20% 0px -80% 0px' });
+    sections.forEach(s => navObserver.observe(s));
+
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('visible');
+      });
+    }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+  </script>
+</body>
+</html>
